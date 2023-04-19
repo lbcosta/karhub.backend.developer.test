@@ -2,11 +2,11 @@ package request
 
 import "github.com/go-playground/validator/v10"
 
-type GetAllStylesRequest struct {
+type GetClosestBeerStylesRequest struct {
 	Temperature float64 `json:"temperature" validate:"required"`
 }
 
-func (r *GetAllStylesRequest) Validate() error {
+func (r *GetClosestBeerStylesRequest) Validate() error {
 	validate := validator.New()
 
 	err := validate.Struct(r)

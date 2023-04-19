@@ -36,7 +36,7 @@ func (r Router) Start(port string) error {
 	beer.Post("/", r.beerHandler.HandleCreate)
 	beer.Put("/:id", r.beerHandler.HandleUpdate)
 	beer.Delete("/:id", r.beerHandler.HandleDelete)
-	beer.Get("/style", r.beerHandler.HandleGetAllStyles)
+	beer.Get("/style", r.beerHandler.HandleGetClosestBeerStyles)
 
 	return app.Listen(port)
 }

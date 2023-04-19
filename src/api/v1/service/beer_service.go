@@ -5,6 +5,7 @@ import (
 	"karhub.backend.developer.test/src/api/v1/errors/apierr"
 	"karhub.backend.developer.test/src/api/v1/model"
 	"karhub.backend.developer.test/src/api/v1/repository"
+	"math"
 )
 
 type BeerService struct {
@@ -74,15 +75,17 @@ func (s *BeerService) Delete(id int) error {
 	return s.beerRepository.Delete(id)
 }
 
-func (s *BeerService) GetAllStyles(temperature float64) ([]domain.Beer, error) {
-	//styles, err := s.beerRepository.GetAllStyles(temperature)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//
-	//domainStyles := model.Beers(styles)
+func (s *BeerService) GetClosestBeerStyles(temperature float64) ([]domain.Beer, error) {
+	beersModel, err := s.beerRepository.GetAll()
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	beers := model.Beers(beersModel).ToDomain()
+
+	closestBeers := findClosestBeers(temperature, beers)
+
+	return closestBeers, nil
 }
 
 func updateFields(beer *model.Beer, data *domain.Beer) {
@@ -101,4 +104,41 @@ func updateFields(beer *model.Beer, data *domain.Beer) {
 
 func isTemperatureValid(beer *model.Beer, data *domain.Beer) bool {
 	return data.MinTemperature != nil && (*data.MinTemperature >= beer.MaxTemperature) || data.MaxTemperature != nil && (*data.MaxTemperature <= beer.MinTemperature)
+}
+
+func containsBeer(targetBeer domain.Beer, beers []domain.Beer) bool {
+	for _, beer := range beers {
+		if beer.Style == targetBeer.Style {
+			return true
+		}
+	}
+
+	return false
+}
+
+func findClosestBeers(temperature float64, beers []domain.Beer) []domain.Beer {
+	var minDelta *float64
+	var targetBeers = make([]domain.Beer, 0)
+
+	for _, beer := range beers {
+		delta := math.Abs(((*beer.MinTemperature + *beer.MaxTemperature) / 2) - temperature)
+
+		if minDelta == nil {
+			minDelta = &delta
+			targetBeers = append(targetBeers, beer)
+			continue
+		}
+
+		if delta < *minDelta {
+			minDelta = &delta
+			targetBeers = []domain.Beer{beer}
+		}
+
+		if delta == *minDelta && !containsBeer(beer, targetBeers) {
+			minDelta = &delta
+			targetBeers = append(targetBeers, beer)
+		}
+	}
+
+	return targetBeers
 }

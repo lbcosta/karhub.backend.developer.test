@@ -91,8 +91,8 @@ func (h BeerHandler) HandleDelete(c *fiber.Ctx) error {
 	return c.SendStatus(fiber.StatusNoContent)
 }
 
-func (h BeerHandler) HandleGetAllStyles(c *fiber.Ctx) error {
-	var req request.GetAllStylesRequest
+func (h BeerHandler) HandleGetClosestBeerStyles(c *fiber.Ctx) error {
+	var req request.GetClosestBeerStylesRequest
 	err := c.BodyParser(&req)
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, fmt.Errorf("failed to parse body: %w", err).Error())
@@ -103,12 +103,19 @@ func (h BeerHandler) HandleGetAllStyles(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, fmt.Errorf("failed to validate body: %w", err).Error())
 	}
 
-	beers, err := h.beerService.GetAllStyles(req.Temperature)
+	beers, err := h.beerService.GetClosestBeerStyles(req.Temperature)
 	if err != nil {
-		return fiber.NewError(fiber.StatusUnprocessableEntity, fmt.Errorf("failed to get all beer styles: %w", err).Error())
+		return fiber.NewError(fiber.StatusUnprocessableEntity, fmt.Errorf("failed to get beer styles: %w", err).Error())
 	}
 
 	// TODO: use Spotify API to get the playlist based on the beer styles and mount it on the response
+	// !GET PLAYLISTS:
+	// name: { playlists} -> { items[0] } -> { name }
+	// id: { playlists } -> { items [0] } -> { id }
+	// !GET TRACKS:
+	// name: { items[0] } -> { track } -> { name }
+	// artist: { track } -> { artists } -> { name }
+	// link: { track } -> { external_urls } -> { spotify }
 
 	return c.JSON(beers)
 }
