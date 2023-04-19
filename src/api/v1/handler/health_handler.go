@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"karhub.backend.developer.test/src/config/database"
 	"time"
 )
 
@@ -36,15 +37,10 @@ func (h HealthHandler) Handle(c *fiber.Ctx) error {
 }
 
 func checkDatabaseConnection() string {
-	//err := database.PingMySql()
-	//if err != nil {
-	//	return "ERROR"
-	//}
-	//
-	//err = database.PingPostgres()
-	//if err != nil {
-	//	return "ERROR"
-	//}
+	err := database.PingPostgres()
+	if err != nil {
+		return "ERROR"
+	}
 
 	return "OK"
 }

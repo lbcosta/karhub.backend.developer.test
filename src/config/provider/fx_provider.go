@@ -4,6 +4,9 @@ import (
 	"context"
 	"go.uber.org/fx"
 	"karhub.backend.developer.test/src/api/v1/handler"
+	repository "karhub.backend.developer.test/src/api/v1/repository/gorm"
+	"karhub.backend.developer.test/src/api/v1/service"
+	"karhub.backend.developer.test/src/config/database"
 )
 
 type AppOptions struct {
@@ -36,6 +39,10 @@ func NewApp(options AppOptions) *fx.App {
 
 func providers() []interface{} {
 	return []interface{}{
+		handler.NewBeerHandler,
 		handler.NewHealthHandler,
+		service.NewBeerService,
+		repository.NewGormBeerRepository,
+		database.NewPostgresDatabase,
 	}
 }
