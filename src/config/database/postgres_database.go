@@ -20,13 +20,12 @@ type PostgresDatabase struct {
 
 func NewPostgresDatabase() PostgresDatabase {
 	dsn := fmt.Sprintf(
-		"user=%s password=%s dbname=%s host=%s port=%s sslmode=%s timezone=%s",
+		"user=%s password=%s dbname=%s host=%s port=%s timezone=%s",
 		os.Getenv("POSTGRES_USER"),
 		os.Getenv("POSTGRES_PASSWORD"),
 		os.Getenv("POSTGRES_DB"),
 		os.Getenv("POSTGRES_HOST"),
 		os.Getenv("POSTGRES_PORT"),
-		os.Getenv("POSTGRES_SSLMODE"),
 		"America/Sao_Paulo")
 
 	connection := PostgresDatabase{}.connect(dsn)
