@@ -10,11 +10,12 @@ import (
 )
 
 type BeerHandler struct {
-	beerService service.BeerService
+	beerService    service.BeerService
+	spotifyService service.SpotifyService
 }
 
-func NewBeerHandler(beerService service.BeerService) BeerHandler {
-	return BeerHandler{beerService: beerService}
+func NewBeerHandler(beerService service.BeerService, spotifyService service.SpotifyService) BeerHandler {
+	return BeerHandler{beerService: beerService, spotifyService: spotifyService}
 }
 
 func (h BeerHandler) HandleGetAll(c *fiber.Ctx) error {
@@ -108,14 +109,15 @@ func (h BeerHandler) HandleGetClosestBeerStyles(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusUnprocessableEntity, fmt.Errorf("failed to get beer styles: %w", err).Error())
 	}
 
-	// TODO: use Spotify API to get the playlist based on the beer styles and mount it on the response
-	// !GET PLAYLISTS:
-	// name: { playlists} -> { items[0] } -> { name }
-	// id: { playlists } -> { items [0] } -> { id }
-	// !GET TRACKS:
-	// name: { items[0] } -> { track } -> { name }
-	// artist: { track } -> { artists } -> { name }
-	// link: { track } -> { external_urls } -> { spotify }
+	spotifyToken, err := h.spotifyService.GetToken()
+	if err != nil {
+		return fiber.NewError(fiber.StatusUnprocessableEntity, fmt.Errorf("failed to get spotify token: %w", err).Error())
+	}
 
-	return c.JSON(beers)
+	playlists, err := h.spotifyService.SearchPlaylists(beers, spotifyToken)
+	if err != nil {
+		return fiber.NewError(fiber.StatusUnprocessableEntity, fmt.Errorf("failed to get spotify playlists: %w", err).Error())
+	}
+
+	return c.JSON(playlists)
 }

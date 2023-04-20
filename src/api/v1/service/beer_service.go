@@ -75,7 +75,7 @@ func (s *BeerService) Delete(id int) error {
 	return s.beerRepository.Delete(id)
 }
 
-func (s *BeerService) GetClosestBeerStyles(temperature float64) ([]domain.Beer, error) {
+func (s *BeerService) GetClosestBeerStyles(temperature float64) ([]string, error) {
 	beersModel, err := s.beerRepository.GetAll()
 	if err != nil {
 		return nil, err
@@ -106,39 +106,39 @@ func isTemperatureValid(beer *model.Beer, data *domain.Beer) bool {
 	return data.MinTemperature != nil && (*data.MinTemperature >= beer.MaxTemperature) || data.MaxTemperature != nil && (*data.MaxTemperature <= beer.MinTemperature)
 }
 
-func containsBeer(targetBeer domain.Beer, beers []domain.Beer) bool {
-	for _, beer := range beers {
-		if beer.Style == targetBeer.Style {
-			return true
-		}
-	}
-
-	return false
-}
-
-func findClosestBeers(temperature float64, beers []domain.Beer) []domain.Beer {
+func findClosestBeers(temperature float64, beers []domain.Beer) []string {
 	var minDelta *float64
-	var targetBeers = make([]domain.Beer, 0)
+	var targetBeers = make([]string, 0)
 
 	for _, beer := range beers {
 		delta := math.Abs(((*beer.MinTemperature + *beer.MaxTemperature) / 2) - temperature)
 
 		if minDelta == nil {
 			minDelta = &delta
-			targetBeers = append(targetBeers, beer)
+			targetBeers = append(targetBeers, *beer.Style)
 			continue
 		}
 
 		if delta < *minDelta {
 			minDelta = &delta
-			targetBeers = []domain.Beer{beer}
+			targetBeers = []string{*beer.Style}
 		}
 
-		if delta == *minDelta && !containsBeer(beer, targetBeers) {
+		if delta == *minDelta && !contains(*beer.Style, targetBeers) {
 			minDelta = &delta
-			targetBeers = append(targetBeers, beer)
+			targetBeers = append(targetBeers, *beer.Style)
 		}
 	}
 
 	return targetBeers
+}
+
+func contains(elem string, array []string) bool {
+	for _, beer := range array {
+		if beer == elem {
+			return true
+		}
+	}
+
+	return false
 }

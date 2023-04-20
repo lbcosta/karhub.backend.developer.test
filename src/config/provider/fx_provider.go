@@ -42,6 +42,7 @@ func providers() []interface{} {
 		handler.NewBeerHandler,
 		handler.NewHealthHandler,
 		service.NewBeerService,
+		service.NewSpotifyService,
 		repository.NewGormBeerRepository,
 		database.NewPostgresDatabase,
 	}
