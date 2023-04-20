@@ -109,10 +109,7 @@ func (h BeerHandler) HandleGetClosestBeerStyles(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusUnprocessableEntity, fmt.Errorf("failed to get beer styles: %w", err).Error())
 	}
 
-	spotifyToken, err := h.spotifyService.GetToken()
-	if err != nil {
-		return fiber.NewError(fiber.StatusUnprocessableEntity, fmt.Errorf("failed to get spotify token: %w", err).Error())
-	}
+	spotifyToken := c.Locals("token").(string)
 
 	playlists, err := h.spotifyService.SearchPlaylists(beers, spotifyToken)
 	if err != nil {

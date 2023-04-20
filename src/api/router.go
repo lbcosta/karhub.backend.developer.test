@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"karhub.backend.developer.test/src/api/v1/handler"
+	"karhub.backend.developer.test/src/api/v1/middleware"
 )
 
 const (
@@ -36,6 +37,9 @@ func (r Router) Start(port string) error {
 	beer.Post("/", r.beerHandler.HandleCreate)
 	beer.Put("/:id", r.beerHandler.HandleUpdate)
 	beer.Delete("/:id", r.beerHandler.HandleDelete)
+
+	beer.Use(middleware.Authenticate)
+
 	beer.Get("/style", r.beerHandler.HandleGetClosestBeerStyles)
 
 	return app.Listen(port)

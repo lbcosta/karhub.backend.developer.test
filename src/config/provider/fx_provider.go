@@ -4,7 +4,8 @@ import (
 	"context"
 	"go.uber.org/fx"
 	"karhub.backend.developer.test/src/api/v1/handler"
-	repository "karhub.backend.developer.test/src/api/v1/repository/gorm"
+	gormRepositories "karhub.backend.developer.test/src/api/v1/repository/gorm"
+	httpRepositories "karhub.backend.developer.test/src/api/v1/repository/spotify"
 	"karhub.backend.developer.test/src/api/v1/service"
 	"karhub.backend.developer.test/src/config/database"
 )
@@ -43,7 +44,8 @@ func providers() []interface{} {
 		handler.NewHealthHandler,
 		service.NewBeerService,
 		service.NewSpotifyService,
-		repository.NewGormBeerRepository,
+		gormRepositories.NewGormBeerRepository,
+		httpRepositories.NewSpotifyPlaylistRepository,
 		database.NewPostgresDatabase,
 	}
 }

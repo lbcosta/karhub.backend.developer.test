@@ -6,3 +6,8 @@ type Beer struct {
 	MinTemperature *float64 `json:"min_temperature"`
 	MaxTemperature *float64 `json:"max_temperature"`
 }
+
+type BeerPlaylist struct {
+	BeerStyle string   `json:"beer_style"`
+	Playlist  Playlist `json:"playlist"`
+}
