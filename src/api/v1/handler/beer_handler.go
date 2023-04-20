@@ -10,12 +10,12 @@ import (
 )
 
 type BeerHandler struct {
-	beerService    service.BeerService
-	spotifyService service.SpotifyService
+	beerService     service.BeerService
+	playlistService service.PlaylistService
 }
 
-func NewBeerHandler(beerService service.BeerService, spotifyService service.SpotifyService) BeerHandler {
-	return BeerHandler{beerService: beerService, spotifyService: spotifyService}
+func NewBeerHandler(beerService service.BeerService, playlistService service.PlaylistService) BeerHandler {
+	return BeerHandler{beerService: beerService, playlistService: playlistService}
 }
 
 func (h BeerHandler) HandleGetAll(c *fiber.Ctx) error {
@@ -111,7 +111,7 @@ func (h BeerHandler) HandleGetClosestBeerStyles(c *fiber.Ctx) error {
 
 	spotifyToken := c.Locals("token").(string)
 
-	playlists, err := h.spotifyService.SearchPlaylists(beers, spotifyToken)
+	playlists, err := h.playlistService.SearchPlaylists(beers, spotifyToken)
 	if err != nil {
 		return fiber.NewError(fiber.StatusUnprocessableEntity, fmt.Errorf("failed to get spotify playlists: %w", err).Error())
 	}

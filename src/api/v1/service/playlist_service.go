@@ -5,15 +5,15 @@ import (
 	"karhub.backend.developer.test/src/api/v1/repository"
 )
 
-type SpotifyService struct {
+type PlaylistService struct {
 	playlistRepository repository.PlaylistRepository
 }
 
-func NewSpotifyService(playlistRepository repository.PlaylistRepository) SpotifyService {
-	return SpotifyService{playlistRepository: playlistRepository}
+func NewPlaylistService(playlistRepository repository.PlaylistRepository) PlaylistService {
+	return PlaylistService{playlistRepository: playlistRepository}
 }
 
-func (s SpotifyService) SearchPlaylists(beerStyles []string, token string) ([]domain.BeerPlaylist, error) {
+func (s PlaylistService) SearchPlaylists(beerStyles []string, token string) ([]domain.BeerPlaylist, error) {
 	playlists := make([]domain.BeerPlaylist, len(beerStyles))
 
 	for beerStyleIdx, beerStyle := range beerStyles {
