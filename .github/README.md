@@ -7,7 +7,7 @@
 
 <div align="center">
   <a href="https://github.com/Azure/gocover">
-    <img src="https://img.shields.io/badge/%F0%9F%94%8Egocover-75.4%25-green">
+    <img src="https://img.shields.io/badge/%F0%9F%94%8Egocover-90.6%25-green">
   </a>
   <a href="https://github.com/securego/gosec">
     <img src="https://img.shields.io/badge/%F0%9F%94%91gosec-passing-green">
