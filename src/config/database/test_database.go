@@ -22,6 +22,54 @@ func NewTestDatabase(databaseName string) TestDatabase {
 
 	connection.AutoMigrate(&model.Beer{})
 
+	connection.Create([]model.Beer{
+		{
+			Style:          "Weissbier",
+			MinTemperature: -1,
+			MaxTemperature: 3,
+		},
+		{
+			Style:          "Pilsens",
+			MinTemperature: -2,
+			MaxTemperature: 4,
+		},
+		{
+			Style:          "Weizenbier",
+			MinTemperature: -4,
+			MaxTemperature: 6,
+		},
+		{
+			Style:          "Red ale",
+			MinTemperature: -5,
+			MaxTemperature: 5,
+		},
+		{
+			Style:          "India pale ale",
+			MinTemperature: -6,
+			MaxTemperature: 7,
+		},
+		{
+			Style:          "IPA",
+			MinTemperature: -7,
+			MaxTemperature: 10,
+		},
+		{
+			Style:          "Dunkel",
+			MinTemperature: -8,
+			MaxTemperature: 2,
+		},
+		{
+			Style:          "Imperial Stouts",
+			MinTemperature: -10,
+			MaxTemperature: 13,
+		},
+		{
+			Style:          "Brown ale",
+			MinTemperature: 0,
+			MaxTemperature: 14,
+		},
+	})
+
 	testDatabase := TestDatabase{
 		DB: connection,
 	}
