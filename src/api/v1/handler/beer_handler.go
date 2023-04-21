@@ -68,6 +68,10 @@ func (h BeerHandler) HandleUpdate(c *fiber.Ctx) error {
 			return fiber.NewError(fiber.StatusNotFound, err.Error())
 		}
 
+		if errors.Is(err, apierr.ErrInvalidTemperature) {
+			return fiber.NewError(fiber.StatusBadRequest, err.Error())
+		}
+
 		return fiber.NewError(fiber.StatusUnprocessableEntity, fmt.Errorf("failed to update beer: %w", err).Error())
 	}
 
