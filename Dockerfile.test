@@ -1,0 +1,10 @@
+FROM golang:1.20
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+CMD sh -c 'go test -v ./src/api/v1/handler/ && go test -v ./src/api/v1/service/'
