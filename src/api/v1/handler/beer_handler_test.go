@@ -144,6 +144,20 @@ func (suite *BeerHandlerTestSuite) Test_HandleCreate_BadRequest() {
 	suite.Equal(fiber.StatusBadRequest, response.StatusCode)
 }
 
+func (suite *BeerHandlerTestSuite) Test_HandleCreate_AlreadyExists() {
+	reqBody := []byte(`{ "style": "IPA", "min_temperature": -7, "max_temperature": 10 }`)
+
+	request := httptest.NewRequest("POST", "/", strings.NewReader(string(reqBody)))
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err := suite.App.Test(request, -1)
+	if err != nil {
+		suite.T().Fatalf("Failed to test: %s", err)
+	}
+
+	suite.Equal(fiber.StatusUnprocessableEntity, response.StatusCode)
+}
+
 func (suite *BeerHandlerTestSuite) Test_HandleUpdate_Success() {
 	reqBody := []byte(`{ "min_temperature": 2, "max_temperature": 4 }`)
 
