@@ -38,7 +38,7 @@ func (suite *BeerHandlerTestSuite) SetupTest() {
 	app := fiber.New()
 	app.Get("/", beerHandler.HandleGetAll)
 	app.Post("/", beerHandler.HandleCreate)
-	app.Put("/:id", beerHandler.HandleUpdate)
+	app.Patch("/:id", beerHandler.HandleUpdate)
 	app.Delete("/:id", beerHandler.HandleDelete)
 
 	app.Use(middleware.Authenticate)
@@ -161,7 +161,7 @@ func (suite *BeerHandlerTestSuite) Test_HandleCreate_AlreadyExists() {
 func (suite *BeerHandlerTestSuite) Test_HandleUpdate_Success() {
 	reqBody := []byte(`{ "min_temperature": 2, "max_temperature": 4 }`)
 
-	request := httptest.NewRequest("PUT", "/6", strings.NewReader(string(reqBody)))
+	request := httptest.NewRequest("PATCH", "/6", strings.NewReader(string(reqBody)))
 	request.Header.Set("Content-Type", "application/json")
 
 	response, err := suite.App.Test(request, -1)
@@ -196,7 +196,7 @@ func (suite *BeerHandlerTestSuite) Test_HandleUpdate_Success() {
 func (suite *BeerHandlerTestSuite) Test_HandleUpdate_BadRequest() {
 	reqBody := []byte(`{ "min_temperature": 5, "max_temperature": 4 }`)
 
-	request := httptest.NewRequest("PUT", "/6", strings.NewReader(string(reqBody)))
+	request := httptest.NewRequest("PATCH", "/6", strings.NewReader(string(reqBody)))
 	request.Header.Set("Content-Type", "application/json")
 
 	response, err := suite.App.Test(request, -1)
@@ -210,7 +210,7 @@ func (suite *BeerHandlerTestSuite) Test_HandleUpdate_BadRequest() {
 func (suite *BeerHandlerTestSuite) Test_HandleUpdate_NotFound() {
 	reqBody := []byte(`{ "min_temperature": 2, "max_temperature": 4 }`)
 
-	request := httptest.NewRequest("PUT", "/100", strings.NewReader(string(reqBody)))
+	request := httptest.NewRequest("PATCH", "/100", strings.NewReader(string(reqBody)))
 	request.Header.Set("Content-Type", "application/json")
 
 	response, err := suite.App.Test(request, -1)
@@ -226,7 +226,7 @@ func (suite *BeerHandlerTestSuite) Test_HandleUpdate_Error() {
 
 	reqBody := []byte(`{ "min_temperature": 2, "max_temperature": 4 }`)
 
-	request := httptest.NewRequest("PUT", "/6", strings.NewReader(string(reqBody)))
+	request := httptest.NewRequest("PATCH", "/6", strings.NewReader(string(reqBody)))
 	request.Header.Set("Content-Type", "application/json")
 
 	response, err := suite.App.Test(request, -1)

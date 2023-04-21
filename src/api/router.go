@@ -35,7 +35,7 @@ func (r Router) Start(port string) error {
 	beer := v1.Group("/beer")
 	beer.Get("/", r.beerHandler.HandleGetAll)
 	beer.Post("/", r.beerHandler.HandleCreate)
-	beer.Put("/:id", r.beerHandler.HandleUpdate)
+	beer.Patch("/:id", r.beerHandler.HandleUpdate)
 	beer.Delete("/:id", r.beerHandler.HandleDelete)
 
 	beer.Use(middleware.Authenticate)
