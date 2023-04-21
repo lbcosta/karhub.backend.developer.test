@@ -52,7 +52,7 @@ func (s *BeerService) Update(id int, data domain.Beer) (domain.Beer, error) {
 		return domain.Beer{}, err
 	}
 
-	if isTemperatureValid(&beer, &data) {
+	if !isTemperatureValid(&beer, &data) {
 		return domain.Beer{}, apierr.ErrInvalidTemperature
 	}
 
@@ -103,7 +103,17 @@ func updateFields(beer *model.Beer, data *domain.Beer) {
 }
 
 func isTemperatureValid(beer *model.Beer, data *domain.Beer) bool {
-	return data.MinTemperature != nil && (*data.MinTemperature >= beer.MaxTemperature) || data.MaxTemperature != nil && (*data.MaxTemperature <= beer.MinTemperature)
+	min, max := beer.MinTemperature, beer.MaxTemperature
+
+	if data.MinTemperature != nil {
+		min = *data.MinTemperature
+	}
+
+	if data.MaxTemperature != nil {
+		max = *data.MaxTemperature
+	}
+
+	return min < max
 }
 
 func findClosestBeers(temperature float64, beers []domain.Beer) []string {
