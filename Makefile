@@ -20,3 +20,8 @@ test:
 	@docker build -t beer_api-test -f Dockerfile.test .
 	@docker run --rm --env-file .env beer_api-test
 	@printf "$(COLOR_GREEN)Tests passed.$(COLOR_RESET)\n\n"
+
+cleanup:
+	@printf "$(COLOR_BRIGHT_BLUE)Stopping containers...$(COLOR_RESET)\n"
+	@docker-compose down
+	@printf "$(COLOR_GREEN)Containers stopped.$(COLOR_RESET)\n\n"
