@@ -297,3 +297,21 @@ Exemplo de **Response**:
 ]
       
 ```
+
+### 💓 Health Check
+
+**URL**: `/health` <br>
+**Method**: GET<br>
+**Response**: Informações sobre o funcionamento da aplicação<br>
+
+Exemplo de **Response**:
+
+<img src="https://img.shields.io/badge/Status-200-green">
+
+```json{
+    "status": "OK",
+    "version": "1.0.0",
+    "uptime": "13.271318371s",
+    "database_status": "OK"
+}
+```
