@@ -36,7 +36,7 @@
 
 # ⚙️ Instalação
 
-**É necessário ter Go, Docker, Docker Compose e Make instalados na sua máquina.**
+**É necessário ter Docker, Docker Compose e Make instalados na sua máquina.**
 
 Clone o projeto para sua máquina:
 
@@ -60,6 +60,10 @@ POSTGRES_USER=karhub
 POSTGRES_PASSWORD=karhub.b33r
 POSTGRES_DB=karhub
 ```
+<br>
+
+> 💡 **Observação:** Make não é um requisito obrigatório, mas é recomendado para facilitar a execução dos comandos.
+> Caso não queira utilizar o Make, basta executar os comandos presentes no arquivo `Makefile` manualmente.
 
 # ⚡️ Inicialização
 
